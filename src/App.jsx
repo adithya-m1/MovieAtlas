@@ -34,6 +34,12 @@ const posterPathFromFullUrl = (url) => {
   return url.substring(nextSlash)
 }
 
+// --- helpers for redirect ---
+const googleSearchUrl = (title) => {
+  if (!title) return 'https://www.google.com'
+  return `https://www.google.com/search?q=${encodeURIComponent(title)}+movie`
+}
+
 const App = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -169,7 +175,9 @@ const App = () => {
               {trendingMovies.map((movie, index) => (
                 <li key={movie._id || `community-${index}`}>
                   <p>{index + 1}</p>
-                  <img src={buildPosterUrl(movie)} alt={movie.title || ''} />
+                  <a href={googleSearchUrl(movie.title)} target="_blank" rel="noopener noreferrer">
+                    <img src={buildPosterUrl(movie)} alt={movie.title || ''} />
+                  </a>
                 </li>
               ))}
             </ul>
@@ -184,14 +192,16 @@ const App = () => {
               {apiTrendingMovies.map((movie, index) => (
                 <li key={movie.id}>
                   <p>{index + 1}</p>
-                  <img
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : '/no-movie.png'
-                    }
-                    alt={movie.title || ''}
-                  />
+                  <a href={googleSearchUrl(movie.title)} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : '/no-movie.png'
+                      }
+                      alt={movie.title || ''}
+                    />
+                  </a>
                 </li>
               ))}
             </ul>
@@ -217,7 +227,9 @@ const App = () => {
             >
               {movieList.map((movie) => (
                 <li key={movie.id}>
-                  <MovieCard movie={movie} />
+                  <a href={googleSearchUrl(movie.title)} target="_blank" rel="noopener noreferrer">
+                    <MovieCard movie={movie} />
+                  </a>
                 </li>
               ))}
             </ul>
